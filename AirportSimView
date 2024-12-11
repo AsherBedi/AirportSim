@@ -1,0 +1,46 @@
+import javax.swing.JButton;
+import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class AirportSimView {
+	
+	private JFrame window;
+	private JPanel panel;
+	private JButton[] buttons;
+	
+	public AirportSimView() {
+		
+		window = new JFrame(" ");
+		panel = (JPanel) window.getContentPane();
+		window.setSize(300,400);
+		window.setVisible(true);
+		
+		// Create array for button names and to store references for JButton widgets
+        String[] names = { "Start", "Exit" };
+        buttons = new JButton[ names.length ];
+        
+     // Create a ButtonEventListener object (to be shared by all 3 buttons)
+        ActionListener buttonListener = new ButtonEventListener();
+        
+        // Create JButtons and register our event listener for each
+        for ( int count = 0; count < names.length; count++ ) {
+            buttons[ count ] = new JButton( names[ count ] );
+            buttons[ count ].addActionListener( buttonListener );
+        } 
+        
+        // Add button to each region of the BorderLayout
+        add( buttons[ 0 ], BorderLayout.NORTH ); 
+        add( buttons[ 1 ], BorderLayout.SOUTH ); 
+	}
+	
+	// Add event handlers for the program
+	public void addListener(AirportSimController controller) {
+		
+		
+		
+	}
+	
+}
