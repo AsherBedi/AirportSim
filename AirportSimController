@@ -1,0 +1,25 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class AirportSimController implements ActionListener {
+
+	private AirportSimView view;
+	private AirportSimModel model;
+
+	public static void main(String[] args) {
+		new AirportSimController();
+	}
+
+	public AirportSimController() {
+		this.model = new AirportSimModel();
+		this.view =  new AirportSimView();
+		view.addListener(this);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		// TODO Auto-generated method stub
+		
+		
+	}
+}
