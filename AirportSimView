@@ -1,7 +1,7 @@
 import javax.swing.JButton;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -9,37 +9,39 @@ public class AirportSimView {
 	
 	private JFrame window;
 	private JPanel panel;
-	private JButton[] buttons;
+	private JButton start;
+	private JButton exit;
 	
 	public AirportSimView() {
 		
+		// Initialize and display window
 		window = new JFrame(" ");
-		panel = (JPanel) window.getContentPane();
+		panel = new JPanel();
 		window.setSize(300,400);
+		window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
 		window.setVisible(true);
+		window.add(panel);
+				
+		// Set buttons
+		start = new JButton("Start");
+		exit = new JButton("Exit");
 		
-		// Create array for button names and to store references for JButton widgets
-        String[] names = { "Start", "Exit" };
-        buttons = new JButton[ names.length ];
-        
-     // Create a ButtonEventListener object (to be shared by all 3 buttons)
-        ActionListener buttonListener = new ButtonEventListener();
-        
-        // Create JButtons and register our event listener for each
-        for ( int count = 0; count < names.length; count++ ) {
-            buttons[ count ] = new JButton( names[ count ] );
-            buttons[ count ].addActionListener( buttonListener );
-        } 
-        
-        // Add button to each region of the BorderLayout
-        add( buttons[ 0 ], BorderLayout.NORTH ); 
-        add( buttons[ 1 ], BorderLayout.SOUTH ); 
+		start.setSize(20,100);
+		start.setLocation(130,400);
+		
+		exit.setSize(20,10);
+		exit.setLocation(170,400);
+		
+        // Create a ButtonEventListener object
+        //ActionListener buttonListener = new AirportSimController();
+        // And associate it with the textButton
+        //start.addActionListener( buttonListener );
+        panel.add(start);
+        panel.add(exit);
 	}
 	
 	// Add event handlers for the program
 	public void addListener(AirportSimController controller) {
-		
-		
 		
 	}
 	
