@@ -12,6 +12,7 @@ public class AirportSimView {
 	private JPanel panel;
 	private JLabel label, title, arrivals, takeoffs;
 	private JButton start, exit; 
+	private JTextField arrivalsInput, takeoffsInput;
 	
 	public AirportSimView() {
 		
@@ -26,19 +27,38 @@ public class AirportSimView {
 				
 		title = new JLabel("Airport Simulator (PAY)");
 		label = new JLabel("Press 'Start' to begin simulation.");
-		arrivals = new JLabel("Arrivals\n" + "(Display contents of arrival textfile here)");
-		takeoffs = new JLabel("Takeoffs\n" + "(Display contents of takeoffs textfile here)");
+		arrivals = new JLabel("Arrivals");
+		takeoffs = new JLabel("Takeoffs");
+		arrivalsInput = new JTextField("");
+		takeoffsInput = new JTextField("");
 		
 		// Set buttons
 		start = new JButton("Start");
 		exit = new JButton("Exit");
 		
-		start.setSize(20,100);
-		start.setLocation(130,300);
+		start.setSize(70,30);
+		start.setLocation(60,300);
 		
-		exit.setSize(20,10);
-		exit.setLocation(170,300);
+		exit.setSize(70,30);
+		exit.setLocation(150,300);
 		
+		title.setSize(200,20);
+		title.setLocation(5,0);
+		
+		label.setSize(200,10);
+		label.setLocation(10,40);
+		
+		arrivals.setSize(100,30);
+		arrivals.setLocation(10,90);
+		
+		takeoffs.setSize(100,30);
+		takeoffs.setLocation(80,90);
+		
+		arrivalsInput.setSize(70,30);
+		arrivalsInput.setLocation(20,200);
+		
+		takeoffsInput.setSize(70,30);
+		takeoffsInput.setLocation(100,200);
 		
 		panel.add(title, BorderLayout.NORTH);
         panel.add(label);
@@ -46,6 +66,8 @@ public class AirportSimView {
         panel.add(takeoffs);
         panel.add(start);
         panel.add(exit);
+        panel.add(arrivalsInput);
+        panel.add(takeoffsInput);
         
         
 	}
