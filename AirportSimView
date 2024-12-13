@@ -1,16 +1,17 @@
-import javax.swing.JButton;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
+import java.awt.GridLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class AirportSimView {
 	
 	private JFrame window;
 	private JPanel panel;
-	private JButton start;
-	private JButton exit;
+	private JLabel label, title, arrivals, takeoffs;
+	private JButton start, exit; 
 	
 	public AirportSimView() {
 		
@@ -20,24 +21,33 @@ public class AirportSimView {
 		window.setSize(300,400);
 		window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
 		window.setVisible(true);
-		window.add(panel);
+		window.add(panel, BorderLayout.CENTER);
+		panel.setLayout(new GridLayout());
 				
+		title = new JLabel("Airport Simulator (PAY)");
+		label = new JLabel("Press 'Start' to begin simulation.");
+		arrivals = new JLabel("Arrivals\n" + "(Display contents of arrival textfile here)");
+		takeoffs = new JLabel("Takeoffs\n" + "(Display contents of takeoffs textfile here)");
+		
 		// Set buttons
 		start = new JButton("Start");
 		exit = new JButton("Exit");
 		
 		start.setSize(20,100);
-		start.setLocation(130,400);
+		start.setLocation(130,300);
 		
 		exit.setSize(20,10);
-		exit.setLocation(170,400);
+		exit.setLocation(170,300);
 		
-        // Create a ButtonEventListener object
-        //ActionListener buttonListener = new AirportSimController();
-        // And associate it with the textButton
-        //start.addActionListener( buttonListener );
+		
+		panel.add(title, BorderLayout.NORTH);
+        panel.add(label);
+        panel.add(arrivals);
+        panel.add(takeoffs);
         panel.add(start);
         panel.add(exit);
+        
+        
 	}
 	
 	// Add event handlers for the program
