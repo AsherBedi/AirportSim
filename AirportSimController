@@ -13,13 +13,36 @@ public class AirportSimController implements ActionListener {
 	public AirportSimController() {
 		this.model = new AirportSimModel();
 		this.view =  new AirportSimView();
+		view.showGUI();
 		view.addListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		// TODO Auto-generated method stub
 		
+		if (event.getSource() == view.getArrivalsInput()) {
+//			System.out.println("ArrivalsInput = " + view.getArrivalsInputValue());
+			model.addtoArrivalsQueue(view.getArrivalsInput().getText());
+			view.setArrivalsInput("");
+			
+			view.setArrivals(model.getArrivalsQueue());
+			
+//			for (String s : model.getArrivalsQueue()) {
+//				System.out.println("ArrivalsQueue = " + s.toString());
+//			}
+			
+		} else if (event.getSource() == view.getTakeoffsInput()) {
+			model.addtoTakeoffsQueue(view.getTakeoffsInput().getText());
+			view.setTakeoffsInput("");
+			
+			view.setTakeoffs(model.getTakeoffsQueue());
+
+		}
+
+		//TODO: Add Action Events for Start / Exit
+		//TODO: Add Error checking to ensure flight numbers are integers from 1-9999
+		//TODO: Add timer functionality and logic (4 sec for arrival, 2 sec for takeoff)
 		
 	}
+	//TODO: Add read in from file on start / write back to file on exit
 }
