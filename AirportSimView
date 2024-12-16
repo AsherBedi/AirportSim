@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.Queue;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -38,9 +37,9 @@ public class AirportSimView {
 		// - display Arrivals/Takeoffs text input boxes
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new GridLayout(2,2));
-		arrivalsInput = new JTextField(5);
+		arrivalsInput = new JTextField(7);
 		
-		takeoffsInput = new JTextField(5);
+		takeoffsInput = new JTextField(7);
 	    inputPanel.add(new JLabel("Arrivals"));
 	    inputPanel.add(new JLabel("Takeoffs"));
 	    inputPanel.add(arrivalsInput);
@@ -59,11 +58,11 @@ public class AirportSimView {
 	    queuePanel.add(takeoffs);
 
         // - add elements to left area of window
-		JPanel westPanel = new JPanel();
-		westPanel.setLayout(new BorderLayout());
-		westPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
-		westPanel.add(inputPanel, BorderLayout.NORTH);
-		westPanel.add(queuePanel, BorderLayout.CENTER);
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BorderLayout());
+		centerPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
+		centerPanel.add(inputPanel, BorderLayout.NORTH);
+		centerPanel.add(queuePanel, BorderLayout.CENTER);
 
 		
 		// Set up the right area of the window
@@ -81,9 +80,9 @@ public class AirportSimView {
 		// - TODO: Add plane animation to center region
 		
 		// - add elements to right area of window
-		JPanel centerPanel = new JPanel();
-		centerPanel.setLayout(new BorderLayout());
-		centerPanel.add(buttonPanel, BorderLayout.NORTH);
+		JPanel eastPanel = new JPanel();
+		eastPanel.setLayout(new BorderLayout());
+		eastPanel.add(buttonPanel, BorderLayout.NORTH);
 		
 		
 		// Set up the status text at bottom of window
@@ -93,12 +92,20 @@ public class AirportSimView {
 		
 		// Add elements to window and display it
 		window = new JFrame(" ");
-		window.setSize(400,500);
+		window.setSize(350,400);
 		window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
 		window.add(title, BorderLayout.NORTH);
-		window.add(westPanel, BorderLayout.WEST);
 		window.add(centerPanel, BorderLayout.CENTER);
+		window.add(eastPanel, BorderLayout.EAST);
 		window.add(statusText, BorderLayout.SOUTH);     
+	}
+	
+	public JButton getStartButton() {
+		return startButton;
+	}
+	
+	public JButton getExitButton() {
+		return exitButton;
 	}
 	
 	public JTextField getArrivalsInput() {
@@ -143,6 +150,8 @@ public class AirportSimView {
 	public void addListener(AirportSimController controller) {
 		arrivalsInput.addActionListener(controller);
 		takeoffsInput.addActionListener(controller);
+		startButton.addActionListener(controller);
+		exitButton.addActionListener(controller);
 	}
 	
 }
