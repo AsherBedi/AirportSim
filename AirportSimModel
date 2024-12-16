@@ -1,3 +1,27 @@
-public class AirportSimModel {
+import java.util.LinkedList;
+import java.util.Queue;
 
+public class AirportSimModel {
+	private Queue<String> arrivalsQueue, takeoffsQueue;
+	
+	public AirportSimModel() {
+		arrivalsQueue = new LinkedList<String>();
+		takeoffsQueue = new LinkedList<String>();
+	}
+	
+	public void addtoArrivalsQueue(String flight) {
+		arrivalsQueue.add(flight);
+	}
+	
+	public Queue<String> getArrivalsQueue() {
+		return arrivalsQueue;
+	}
+	
+	public Queue<String> getTakeoffsQueue() {
+		return takeoffsQueue;
+	}
+	
+	public void addtoTakeoffsQueue(String flight) {
+		takeoffsQueue.add(flight);
+	}
 }
