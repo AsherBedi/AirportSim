@@ -1,80 +1,148 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.Queue;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class AirportSimView {
 	
 	private JFrame window;
-	private JPanel panel;
-	private JLabel label, title, arrivals, takeoffs;
-	private JButton start, exit; 
+	private JLabel statusText; 
+	private JList<String> arrivals, takeoffs;
+	private DefaultListModel<String> arrivalsModel, takeoffsModel;
+	private JButton startButton, exitButton; 
 	private JTextField arrivalsInput, takeoffsInput;
+	
+
 	
 	public AirportSimView() {
 		
-		// Initialize and display window
+		// Set up the top area of the window
+		JLabel title = new JLabel("<html><font size=+1>Airport Simulator (PAY)</font><br><br>Press 'Start' to begin simulation.");
+		title.setBorder(new EmptyBorder(0, 10, 10, 10));
+		
+
+		// Set up the left area of the window
+		
+		// - display Arrivals/Takeoffs text input boxes
+		JPanel inputPanel = new JPanel();
+		inputPanel.setLayout(new GridLayout(2,2));
+		arrivalsInput = new JTextField(5);
+		
+		takeoffsInput = new JTextField(5);
+	    inputPanel.add(new JLabel("Arrivals"));
+	    inputPanel.add(new JLabel("Takeoffs"));
+	    inputPanel.add(arrivalsInput);
+	    inputPanel.add(takeoffsInput);
+		
+		// - display of Arrivals/Takeoffs queues
+		JPanel queuePanel = new JPanel();
+		queuePanel.setLayout(new GridLayout(1,2));
+		arrivalsModel = new DefaultListModel<String>();
+		arrivals = new JList<String>(arrivalsModel);
+		takeoffsModel = new DefaultListModel<String>();
+		takeoffs = new JList<String>(takeoffsModel);
+		arrivals.setBorder(BorderFactory.createEtchedBorder());
+		takeoffs.setBorder(BorderFactory.createEtchedBorder());
+	    queuePanel.add(arrivals);
+	    queuePanel.add(takeoffs);
+
+        // - add elements to left area of window
+		JPanel westPanel = new JPanel();
+		westPanel.setLayout(new BorderLayout());
+		westPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
+		westPanel.add(inputPanel, BorderLayout.NORTH);
+		westPanel.add(queuePanel, BorderLayout.CENTER);
+
+		
+		// Set up the right area of the window
+		
+		// - display start/exit buttons
+		startButton = new JButton("Start");
+		exitButton = new JButton("Exit");
+		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(1,2));
+		buttonPanel.add(startButton);
+		buttonPanel.add(exitButton);
+		buttonPanel.setBorder(new EmptyBorder(20, 10, 10, 10));
+
+		// - TODO: Add plane animation to center region
+		
+		// - add elements to right area of window
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BorderLayout());
+		centerPanel.add(buttonPanel, BorderLayout.NORTH);
+		
+		
+		// Set up the status text at bottom of window
+		statusText = new JLabel("<TO DO> Status of arrivals or takeoffs left.");
+		statusText.setBorder(new EmptyBorder(0, 10, 10, 10));
+	
+		
+		// Add elements to window and display it
 		window = new JFrame(" ");
-		panel = new JPanel();
-		window.setSize(300,400);
+		window.setSize(400,500);
 		window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
-		window.setVisible(true);
-		window.add(panel, BorderLayout.CENTER);
-		panel.setLayout(new GridLayout());
-				
-		title = new JLabel("Airport Simulator (PAY)");
-		label = new JLabel("Press 'Start' to begin simulation.");
-		arrivals = new JLabel("Arrivals");
-		takeoffs = new JLabel("Takeoffs");
-		arrivalsInput = new JTextField("");
-		takeoffsInput = new JTextField("");
-		
-		// Set buttons
-		start = new JButton("Start");
-		exit = new JButton("Exit");
-		
-		start.setSize(70,30);
-		start.setLocation(60,300);
-		
-		exit.setSize(70,30);
-		exit.setLocation(150,300);
-		
-		title.setSize(200,20);
-		title.setLocation(5,0);
-		
-		label.setSize(200,10);
-		label.setLocation(10,40);
-		
-		arrivals.setSize(100,30);
-		arrivals.setLocation(10,90);
-		
-		takeoffs.setSize(100,30);
-		takeoffs.setLocation(80,90);
-		
-		arrivalsInput.setSize(70,30);
-		arrivalsInput.setLocation(20,200);
-		
-		takeoffsInput.setSize(70,30);
-		takeoffsInput.setLocation(100,200);
-		
-		panel.add(title, BorderLayout.NORTH);
-        panel.add(label);
-        panel.add(arrivals);
-        panel.add(takeoffs);
-        panel.add(start);
-        panel.add(exit);
-        panel.add(arrivalsInput);
-        panel.add(takeoffsInput);
-        
-        
+		window.add(title, BorderLayout.NORTH);
+		window.add(westPanel, BorderLayout.WEST);
+		window.add(centerPanel, BorderLayout.CENTER);
+		window.add(statusText, BorderLayout.SOUTH);     
 	}
+	
+	public JTextField getArrivalsInput() {
+		return arrivalsInput;
+	}
+	
+	public void setArrivalsInput(String input) {
+		arrivalsInput.setText(input);
+	}
+		
+	public JTextField getTakeoffsInput() {
+		return takeoffsInput;
+	}
+	
+	public void setTakeoffsInput(String input) {
+		takeoffsInput.setText(input);
+	}
+	
+	public void setArrivals(Queue<String> flights) {
+		arrivalsModel.removeAllElements();
+		
+		for (String s : flights) {
+			arrivalsModel.addElement(s);
+		}
+	}
+
+	public void setTakeoffs(Queue<String> flights) {
+		takeoffsModel.removeAllElements();
+		
+		for (String s : flights) {
+			takeoffsModel.addElement(s);
+		}
+	}
+	
+	
+	public void showGUI() {
+		window.setVisible(true);
+	}
+		
 	
 	// Add event handlers for the program
 	public void addListener(AirportSimController controller) {
-		
+		arrivalsInput.addActionListener(controller);
+		takeoffsInput.addActionListener(controller);
 	}
 	
 }
