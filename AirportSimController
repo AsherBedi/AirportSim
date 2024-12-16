@@ -1,6 +1,8 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
+
 public class AirportSimController implements ActionListener {
 
 	private AirportSimView view;
@@ -31,7 +33,9 @@ public class AirportSimController implements ActionListener {
 //				System.out.println("ArrivalsQueue = " + s.toString());
 //			}
 			
-		} else if (event.getSource() == view.getTakeoffsInput()) {
+		} 
+		
+		else if (event.getSource() == view.getTakeoffsInput()) {
 			model.addtoTakeoffsQueue(view.getTakeoffsInput().getText());
 			view.setTakeoffsInput("");
 			
@@ -40,6 +44,15 @@ public class AirportSimController implements ActionListener {
 		}
 
 		//TODO: Add Action Events for Start / Exit
+		if (event.getSource() == view.getStartButton()) {
+			JOptionPane.showMessageDialog( null, "Started" );
+			//TODO: Make a method in the model to begin all main functions of the program
+		}
+		
+		else if (event.getSource() == view.getExitButton()) {
+			JOptionPane.showMessageDialog( null, "Exiting" );
+			//TODO: Create a method to reopen text files and save leftover queue elements for future use
+		}
 		//TODO: Add Error checking to ensure flight numbers are integers from 1-9999
 		//TODO: Add timer functionality and logic (4 sec for arrival, 2 sec for takeoff)
 		
