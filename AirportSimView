@@ -84,6 +84,8 @@ public class AirportSimView {
 		eastPanel.setLayout(new BorderLayout());
 		eastPanel.add(buttonPanel, BorderLayout.NORTH);
 		
+		JPanel animationPanel = new JPanel();
+		eastPanel.add(animationPanel, BorderLayout.CENTER);
 		
 		// Set up the status text at bottom of window
 		statusText = new JLabel("<TO DO> Status of arrivals or takeoffs left.");
