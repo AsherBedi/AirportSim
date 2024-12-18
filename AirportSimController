@@ -2,49 +2,112 @@ package AirportSim;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Queue;
 
 public class AirportSimController implements ActionListener {
 
 	private AirportSimView view;
 	private AirportSimModel model;
+	private TimerListener timer;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		new AirportSimController();
 	}
 
-	public AirportSimController() {
+	public AirportSimController() throws IOException {
+		this.timer = new TimerListener();
 		this.model = new AirportSimModel();
 		this.view =  new AirportSimView();
-		view.showGUI();
-		view.addListener(this);
+		this.view.addListener(this);
+		this.loadFlightData();
+		this.view.showGUI();
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == view.getExitButton()) {
+			// TODO: Add flights in queue to files
+			try {
+				this.saveFlightData();
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("ERROR: Flight data could not be writtien to files.");
+				System.exit(1);
+			}
+			System.exit(0);
+		}
 		
 		if (event.getSource() == view.getArrivalsInput()) {
-//			System.out.println("ArrivalsInput = " + view.getArrivalsInputValue());
-			model.addtoArrivalsQueue(view.getArrivalsInput().getText());
-			view.setArrivalsInput("");
-			
-			view.setArrivals(model.getArrivalsQueue());
-			
-//			for (String s : model.getArrivalsQueue()) {
-//				System.out.println("ArrivalsQueue = " + s.toString());
-//			}
-			
+			model.addToArrivalsQueue(view.getArrivalsInput().getText());
+			view.setArrivalsInput("");			
+			view.setArrivals(model.getArrivalsQueue());		
 		} else if (event.getSource() == view.getTakeoffsInput()) {
-			model.addtoTakeoffsQueue(view.getTakeoffsInput().getText());
-			view.setTakeoffsInput("");
-			
+			model.addToTakeoffsQueue(view.getTakeoffsInput().getText());
+			view.setTakeoffsInput("");		
 			view.setTakeoffs(model.getTakeoffsQueue());
-
 		}
-
-		//TODO: Add Action Events for Start / Exit
-		//TODO: Add Error checking to ensure flight numbers are integers from 1-9999
-		//TODO: Add timer functionality and logic (4 sec for arrival, 2 sec for takeoff)
 		
+		if (event.getSource() == view.getStartButton())
+			timer.runSimulation(model, view);			
 	}
-	//TODO: Add read in from file on start / write back to file on exit
+	
+	public void loadFlightData() throws IOException {
+		File arrivalsFile = new File("arrivals.txt");
+		File takeoffsFile = new File("takeoffs.txt");
+		BufferedReader flightData;
+		
+		if (arrivalsFile.exists()) {
+			flightData = new BufferedReader(new FileReader(arrivalsFile));
+			String flightNum;
+			while ((flightNum = flightData.readLine()) != null)
+				model.addToArrivalsQueue(flightNum);
+			flightData.close();
+			view.setArrivals(model.getArrivalsQueue());
+		}
+		if (takeoffsFile.exists()) {
+			flightData = new BufferedReader(new FileReader(takeoffsFile));
+			String flightNum;
+			while ((flightNum = flightData.readLine()) != null)
+				model.addToTakeoffsQueue(flightNum);
+			flightData.close();
+			view.setTakeoffs(model.getTakeoffsQueue());
+		}
+	}
+		
+	public void saveFlightData() throws IOException {
+		File arrivalsFile = new File("arrivals.txt");
+		File takeoffsFile = new File("takeoffs.txt");
+		BufferedWriter flightData;
+		Queue<String> flights;
+		
+		// Delete old Flight Data
+		if (arrivalsFile.isFile())
+			arrivalsFile.delete();
+		if (takeoffsFile.isFile())
+			takeoffsFile.delete();
+		
+		// Write Arrivals Flight Data to file
+		flightData = new BufferedWriter(new FileWriter(arrivalsFile));
+		flights = model.getArrivalsQueue();
+		for (String s : flights) { 
+			flightData.write(s);
+			flightData.newLine();
+		}
+		flightData.close();
+
+		// Write Takeoffs Flight Data to file
+		flightData = new BufferedWriter(new FileWriter(takeoffsFile));
+		flights = model.getTakeoffsQueue();
+		for (String s : flights) {
+			flightData.write(s);
+			flightData.newLine();
+		}
+		flightData.close();
+	}	
 }
