@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 public class AirportSimView {
@@ -24,17 +25,17 @@ public class AirportSimView {
 	private JTextField arrivalsInput, takeoffsInput;
 	
 
-	
+	// Set up layout of the GUI
 	public AirportSimView() {
 		
-		// Set up the top area of the window
+		//// Set up the top area of the window
 		JLabel title = new JLabel("<html><font size=+1>Airport Simulator (PAY)</font><br><br>Press 'Start' to begin simulation.");
 		title.setBorder(new EmptyBorder(0, 10, 10, 10));
 		
 
-		// Set up the left area of the window
+		//// Set up the left area of the window
 		
-		// - display Arrivals/Takeoffs text input boxes
+		// Place Arrivals/Takeoffs text input boxes and labels
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new GridLayout(2,2));
 		arrivalsInput = new JTextField(5);
@@ -45,7 +46,7 @@ public class AirportSimView {
 	    inputPanel.add(arrivalsInput);
 	    inputPanel.add(takeoffsInput);
 		
-		// - display of Arrivals/Takeoffs queues
+		// Place Arrivals/Takeoffs queue views
 		JPanel queuePanel = new JPanel();
 		queuePanel.setLayout(new GridLayout(1,2));
 		arrivalsModel = new DefaultListModel<String>();
@@ -57,7 +58,7 @@ public class AirportSimView {
 	    queuePanel.add(arrivals);
 	    queuePanel.add(takeoffs);
 
-        // - add elements to left area of window
+        // Place elements in left area of the window
 		JPanel westPanel = new JPanel();
 		westPanel.setLayout(new BorderLayout());
 		westPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
@@ -65,9 +66,9 @@ public class AirportSimView {
 		westPanel.add(queuePanel, BorderLayout.CENTER);
 
 		
-		// Set up the right area of the window
+		//// Set up the right area of the window
 		
-		// - display start/exit buttons
+		// Place start/exit buttons
 		startButton = new JButton("Start");
 		startButton.setFocusable(false);
 		exitButton = new JButton("Exit");
@@ -80,43 +81,40 @@ public class AirportSimView {
 
 		// - TODO: Add plane animation to center region
 		
-		// - add elements to right area of window
+		// Place elements in right area of window
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new BorderLayout());
 		centerPanel.add(buttonPanel, BorderLayout.NORTH);
 		
-		
-		// Set up the status text at bottom of window
-		statusText = new JLabel("<TO DO> Status of arrivals or takeoffs left.");
+		//// Set up the status text at bottom of window
+		statusText = new JLabel(" ");
 		statusText.setBorder(new EmptyBorder(0, 10, 10, 10));
-	
 		
-		// Add elements to window and display it
-		window = new JFrame(" ");
+		//// Add elements to window and display it
+		window = new JFrame();
 		window.setSize(400,500);
-		window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
+		window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		window.add(title, BorderLayout.NORTH);
 		window.add(westPanel, BorderLayout.WEST);
 		window.add(centerPanel, BorderLayout.CENTER);
 		window.add(statusText, BorderLayout.SOUTH);     
 	}
 	
+	
+	/* getArrivalsInput: Get method for arrivalsInput including user entered data.
+	 * getTakeoffsInput: Get method for takeoffsInput including user entered data.
+	 * getExitButton:    Gets the exit button (used to check source of ActionEvent).
+	 * getStartButton:   Gets the start button (used to check source of ActionEvent).
+	 */
+	
 	public JTextField getArrivalsInput() {
 		return arrivalsInput;
 	}
 	
-	public void setArrivalsInput(String input) {
-		arrivalsInput.setText(input);
-	}
-		
 	public JTextField getTakeoffsInput() {
 		return takeoffsInput;
 	}
-	
-	public void setTakeoffsInput(String input) {
-		takeoffsInput.setText(input);
-	}
-	
+
 	public JButton getExitButton() {
 		return exitButton;
 	}
@@ -124,6 +122,31 @@ public class AirportSimView {
 	public JButton getStartButton() {
 		return startButton;
 	}
+	
+	
+	/* setArrivalsInput: Sets the text in the arrivalsInput text box.
+	 * setTakeoffsInput: Sets the text in the takeoffsInput text box.
+	 *   Used primarily to clear the contents of the text input fields.
+	 *  
+	 * Params:
+	 *   String input - The text to set in the text box.
+	 */
+	
+	public void setArrivalsInput(String input) {
+		arrivalsInput.setText(input);
+	}
+			
+	public void setTakeoffsInput(String input) {
+		takeoffsInput.setText(input);
+	}
+	
+	
+	/* setArrivals: Updates the arrivals text area with the contents of the Arrivals queue.
+	 * setTakeoffs: Updates the takeoffs text area with the contents of the Takeoffs queue.
+	 * 
+	 * Params:
+	 *   Queue<String> flights - The input queue with data to be updated to the text area.
+	 */
 	
 	public void setArrivals(Queue<String> flights) {
 		arrivalsModel.removeAllElements();
@@ -142,15 +165,36 @@ public class AirportSimView {
 	}
 	
 	
+	// showGUI: Shows the graphical user interface.	
 	public void showGUI() {
 		window.setVisible(true);
 	}
-		
+	
+	
+	/* updateStatus: Updates the Status text at the bottom of the window.
+	 * 
+	 * Params:
+	 *   String flight      - The flight being processed or "" if none. 
+	 *   String processType - "arrival", "takeoff", or "" if none.
+	 *   int timer          - For arrivals: 4, 3, 2, 1. For takeoffs: 2, 1.
+	 * 
+	 */
+	
+	public void updateStatus(String flight, String processType, int timer) {
+		if (! flight.isEmpty()) {
+			if (timer == 0)			// Clear Status as flight has finished processing
+				statusText.setText(" ");
+			else					// Display Status of current flight being processed
+				statusText.setText("Processing " + processType + " of flight " + flight +": " + timer);
+		}
+	}
+	
 	
 	// Add event handlers for the program
 	public void addListener(AirportSimController controller) {
 		arrivalsInput.addActionListener(controller);
 		takeoffsInput.addActionListener(controller);
 		exitButton.addActionListener(controller);
+		startButton.addActionListener(controller);
 	}	
 }
