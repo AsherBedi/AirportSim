@@ -1,10 +1,10 @@
+package AirportSim;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class AirportSimModel {
-	
 	private Queue<String> arrivalsQueue, takeoffsQueue;
-	private Boolean isStarted;
 	
 	public AirportSimModel() {
 		arrivalsQueue = new LinkedList<String>();
@@ -26,5 +26,4 @@ public class AirportSimModel {
 	public void addtoTakeoffsQueue(String flight) {
 		takeoffsQueue.add(flight);
 	}
-
 }
