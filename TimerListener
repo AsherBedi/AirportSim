@@ -1,0 +1,34 @@
+package AirportSim;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class TimerListener {
+	private Timer timer;
+	
+	public TimerListener() {
+		timer = new Timer();
+	}
+
+	public void runSimulation(AirportSimModel model, AirportSimView view) {
+		timer.schedule(new TimerTask() {
+			public void run() {
+				simulationSteps(model, view);
+				try {
+					Thread.sleep(600);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					System.out.println("ERROR: There was a problem with the timer.");
+					System.exit(2);								
+				}			
+			}
+		}, 0, 600);		
+	}
+	
+	private void simulationSteps(AirportSimModel model, AirportSimView view) {
+		model.processQueues();
+		view.updateStatus(model.getProcessFlight(), model.getProcessType(), model.getProcessTimer());
+		view.setArrivals(model.getArrivalsQueue());		
+		view.setTakeoffs(model.getTakeoffsQueue());		
+	}
+}
