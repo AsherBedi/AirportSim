@@ -5,15 +5,67 @@ import java.util.Queue;
 
 public class AirportSimModel {
 	private Queue<String> arrivalsQueue, takeoffsQueue;
+	private String processFlight, processType;
+	private int processTimer, arrivalsInARow;
 	
 	public AirportSimModel() {
+		processTimer = 0;
+		arrivalsInARow = 0;
 		arrivalsQueue = new LinkedList<String>();
 		takeoffsQueue = new LinkedList<String>();
 	}
 	
-	public void addtoArrivalsQueue(String flight) {
-		arrivalsQueue.add(flight);
+	/* addToArrivalsQueue: Add a flight to the Arrivals queue.
+	 * addToTakeoffsQueue: Add a flight to the Takeoffs queue.
+	 * 
+	 * Params:
+	 *   String flight: The flight number to be added to the queue.
+	 * 
+	 * Returns:
+	 *   false - The flight could not be added to the queue (invalid flight number).
+	 *   true  - The flight was added to the queue.
+	 */
+	
+	public Boolean addToArrivalsQueue(String flight) {
+		return addToQueue(flight, arrivalsQueue);
 	}
+	
+	public Boolean addToTakeoffsQueue(String flight) {
+		return addToQueue(flight, takeoffsQueue);
+	}
+	
+	
+	/* addToQueue: Checks if the flight number is valid and, if so, adds it to a queue.
+	 * 
+	 * Params:
+	 *   String flight             - The flight number to be added to the queue.
+	 *   Queue<String> flightQueue - The queue to add the flight to.
+	 * 
+	 * Returns:
+	 *   false - Flight number is either not an integer or outside the 0001-9999 range.
+	 *   true: - Flight number is valid.
+	 */
+	
+	public Boolean addToQueue(String flight, Queue<String> flightQueue) {		
+		if (flight.length() != 4)
+			return false;		// flight is not 4 digit
+		
+		try {
+			Integer.parseInt(flight);
+			flightQueue.add(flight);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;		// flight is not an integer
+		}		
+	}
+	
+	
+	/* getArrivalsQueue: Get method for the Arrivals queue.
+	 * getTakeoffsQueue: Get method for the Takeoffs queue.
+	 * 
+	 * Returns:
+	 *   The queue (Arrivals / Takeoffs) depending on the method called.
+	 */
 	
 	public Queue<String> getArrivalsQueue() {
 		return arrivalsQueue;
@@ -23,7 +75,70 @@ public class AirportSimModel {
 		return takeoffsQueue;
 	}
 	
-	public void addtoTakeoffsQueue(String flight) {
-		takeoffsQueue.add(flight);
+	
+	/* getProcessFlight: Get the flight currently being processed.
+	 * getProcessType:   Get the type of processing (arrival / takeoff) currently occurring.
+	 * getProcessTimer:  Get the time remaining for the flight currently being processed.
+	 * 
+	 * Returns:
+	 *   processFlight - The flight being processed or "" if none.
+	 *   processType   - "arrival", "takeoff", or "" if none.
+	 *   processTimer  - For arrivals: 4, 3, 2, 1. For takeoffs: 2, 1. 
+	 */  
+	
+	public String getProcessFlight() {
+		return processFlight;
+	}
+
+	public String getProcessType() {
+		return processType;
+	}
+
+	public int getProcessTimer() {
+		return processTimer;
+	}
+	
+	
+	/* processQueues: Applies Control Tower Operations Rules to the flight queues.
+	 */
+	
+	public void processQueues() {
+		// Check if a flight is currently processing
+		if (processTimer != 0)
+			processTimer--;
+		else {
+			// Flight is not processing so reset and check queues
+			processFlight = "";
+			processType = "";
+			
+			// Check if there are flights in the arrivals queue
+			if (! arrivalsQueue.isEmpty()) { 
+			
+				// If there is a takeoff waiting, skip if two arrivals have been processed in a row
+				if (arrivalsInARow < 2 || takeoffsQueue.isEmpty()) {
+					// Process an arrival
+					processFlight = arrivalsQueue.remove();
+					processType = "arrival";
+					processTimer = 4;
+					
+					// IncrementarrivalInARow. Max of 2 (rule only cares about 2 or more).
+					if (arrivalsInARow < 2)
+						arrivalsInARow++;
+				}
+			}
+			// If an arrival is not currently in progress
+			if (processTimer == 0) {
+				// reset arrivalsInARow as a takeoff is being assessed
+				arrivalsInARow = 0;
+				
+				// Check if there are flights in the takeoffs queue
+				if (! takeoffsQueue.isEmpty()) {
+					// Process a takeoff
+					processFlight = takeoffsQueue.remove();
+					processType = "takeoff";
+					processTimer = 2;
+				}
+			}
+		}
 	}
 }
